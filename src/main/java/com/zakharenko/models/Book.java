@@ -11,8 +11,9 @@ public class Book {
 
     @NotEmpty(message = "Поле \"Автор книги\" не должно быть пустым")
     @Size(max = 120, message = "Поле \"Автор книги\" не должно превышать 120 символов")
-    @Pattern(regexp = "(\\p{Lu}\\p{Ll}*\\s)+(\\p{Lu}\\p{Ll}*)",
-            message = "Поле \"Автор книги\" должно иметь формат Xxx Xxx ...[Xxx] или X X ...[X]")
+    @Pattern(regexp = "(\\p{Lu}\\p{Ll}*)(\\s\\p{Lu}\\p{Ll}*\\.?)*",
+            message = "Поле \"Автор книги\" должно иметь формат \"Иванов Иван Иванович\" или " +
+                    "\"Иванов И. И.\"")
     private String author;
 
 
