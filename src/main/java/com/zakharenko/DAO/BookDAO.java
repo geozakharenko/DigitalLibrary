@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class BookDAO {
@@ -29,11 +30,19 @@ public class BookDAO {
                 new BeanPropertyRowMapper<>(Book.class)).stream().findAny().orElse(null);
     }
 
+    public Optional<Book> checkSameBook(String author, String title) {
+        return jdbcTemplate.query(
+                "SELECT * FROM book WHERE author=? AND title=?",
+                new Object[]{author, title},
+                new BeanPropertyRowMapper<>(Book.class)).stream().findAny();
+    }
+
     public Person getPersonFromBookId(int bookId) {
         return jdbcTemplate.query("SELECT full_name FROM book JOIN person on person.person_id = book.person_id WHERE book_id = ?",
                 new Object[]{bookId},
                 new BeanPropertyRowMapper<>(Person.class)).stream().findAny().orElse(null);
     }
+
     public List<Person> getAllPersons() {
         return jdbcTemplate.query(
                 "SELECT * FROM Person", new BeanPropertyRowMapper<>(Person.class));
@@ -52,6 +61,7 @@ public class BookDAO {
                 updatedBook.getTitle(), updatedBook.getAuthor(), updatedBook.getYearOfRelease(), bookId
         );
     }
+
     public void assignAPerson(Person newPerson, int bookId) {
         jdbcTemplate.update(
                 "UPDATE book SET person_id=? WHERE book_id=?;",
