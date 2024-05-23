@@ -23,7 +23,7 @@ import java.util.Objects;
 @Configuration
 @ComponentScan("com.zakharenko")
 @EnableWebMvc
-@PropertySource("classpath:database.properties")
+@PropertySource("classpath:database.properties.origin")
 public class SpringConfig implements WebMvcConfigurer {
 
     private final ApplicationContext applicationContext;
