@@ -1,17 +1,17 @@
 package com.zakharenko.util;
 
-import com.zakharenko.DAO.PersonDAO;
 import com.zakharenko.models.Person;
+import com.zakharenko.services.PeopleService;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 @Component
 public class PersonCreateValidator implements Validator {
-    private final PersonDAO personDao;
+    private final PeopleService peopleService;
 
-    public PersonCreateValidator(PersonDAO personDao) {
-        this.personDao = personDao;
+    public PersonCreateValidator(PeopleService peopleService) {
+        this.peopleService = peopleService;
     }
 
     @Override
@@ -22,7 +22,7 @@ public class PersonCreateValidator implements Validator {
     @Override
     public void validate(Object o, Errors errors) {
         Person person = (Person) o;
-        if (personDao.show(person.getFullName()).isPresent())
+        if (peopleService.findByFullName(person.getFullName()).isPresent())
             errors.rejectValue("fullName", "", "Это имя уже используется");
     }
 }

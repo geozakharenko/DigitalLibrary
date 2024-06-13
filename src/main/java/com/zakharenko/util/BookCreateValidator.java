@@ -1,17 +1,17 @@
 package com.zakharenko.util;
 
-import com.zakharenko.DAO.BookDAO;
 import com.zakharenko.models.Book;
+import com.zakharenko.services.BooksService;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 @Component
 public class BookCreateValidator implements Validator {
-    private final BookDAO bookDAO;
+    private final BooksService booksService;
 
-    public BookCreateValidator(BookDAO bookDAO) {
-        this.bookDAO = bookDAO;
+    public BookCreateValidator(BooksService booksService) {
+        this.booksService = booksService;
     }
 
     @Override
@@ -22,7 +22,7 @@ public class BookCreateValidator implements Validator {
     @Override
     public void validate(Object o, Errors errors) {
         Book book = (Book) o;
-        if (bookDAO.checkSameBook(book.getAuthor(), book.getTitle()).isPresent())
+        if (booksService.findByAuthorAndTitle(book.getAuthor(), book.getTitle()).isPresent())
             errors.rejectValue("title", "", "Такая книга уже существует");
     }
 }

@@ -1,9 +1,10 @@
 package com.zakharenko.controllers;
 
-import com.zakharenko.DAO.BookDAO;
 import com.zakharenko.models.Book;
 import com.zakharenko.models.Person;
 import com.zakharenko.util.BookCreateValidator;
+import com.zakharenko.services.BooksService;
+import com.zakharenko.services.PeopleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,27 +16,29 @@ import javax.validation.Valid;
 @Controller
 @RequestMapping("/books")
 public class BooksController {
-    public final BookDAO bookDAO;
+    private final BooksService booksService;
+    private final PeopleService peopleService;
     private final BookCreateValidator bookCreateValidator;
 
     @Autowired
-    public BooksController(BookDAO bookDAO, BookCreateValidator bookCreateValidator) {
-        this.bookDAO = bookDAO;
+    public BooksController(BooksService booksService, PeopleService peopleService, BookCreateValidator bookCreateValidator) {
+        this.booksService = booksService;
+        this.peopleService = peopleService;
         this.bookCreateValidator = bookCreateValidator;
     }
 
     @GetMapping()
     public String index(Model model) {
-        model.addAttribute("books", bookDAO.index());
+        model.addAttribute("books", booksService.findAll());
         return "books/index";
     }
 
     @GetMapping("/{bookId}")
     public String show(@ModelAttribute("person") Person person,
                        @PathVariable("bookId") int bookId, Model model) {
-        model.addAttribute("book", bookDAO.show(bookId));
-        model.addAttribute("receivedPerson", bookDAO.getPersonFromBookId(bookId));
-        model.addAttribute("people", bookDAO.getAllPersons());
+        model.addAttribute("book", booksService.findOne(bookId));
+        model.addAttribute("receivedPerson", booksService.getBookOwner(bookId));
+        model.addAttribute("people", peopleService.findAll());
         return "books/show";
     }
 
@@ -50,13 +53,13 @@ public class BooksController {
         bookCreateValidator.validate(book, bindingResult);
         if (bindingResult.hasErrors())
             return "books/new";
-        bookDAO.save(book);
+        booksService.save(book);
         return "redirect:/books";
     }
 
     @GetMapping("/{id}/edit")
     public String edit(@PathVariable("id") int bookId, Model model) {
-        model.addAttribute("book", bookDAO.show(bookId));
+        model.addAttribute("book", booksService.findOne(bookId));
         return "books/edit";
     }
 
@@ -65,27 +68,27 @@ public class BooksController {
                          @PathVariable("id") int bookId) {
         if (bindingResult.hasErrors())
             return "books/edit";
-        bookDAO.update(bookId, book);
+        booksService.update(bookId, book);
         return "redirect:/books";
     }
 
     @PatchMapping("/{bookId}/removePerson")
-    public String deletePersonDependency(@PathVariable("bookId") int bookId) {
-        bookDAO.deletePersonDependency(bookId);
-        return "redirect:/books";
+    public String release(@PathVariable("bookId") int bookId) {
+        System.out.println(bookId);
+        booksService.release(bookId);
+        return "redirect:/books/"+bookId;
     }
 
     @PatchMapping("/{bookId}/assignPerson")
     public String assignAPerson(@ModelAttribute("person") Person person,
                                 @PathVariable("bookId") int bookId) {
-        bookDAO.assignAPerson(person, bookId);
+        booksService.assignAPerson(person, bookId);
         return "redirect:/books";
     }
 
-
     @DeleteMapping("/{id}")
     public String delete(@PathVariable("id") int bookId) {
-        bookDAO.delete(bookId);
+        booksService.delete(bookId);
         return "redirect:/books";
     }
 }
