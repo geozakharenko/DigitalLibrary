@@ -16,12 +16,16 @@
 ```
 http://localhost:8080/people
 http://localhost:8080/books
+http://localhost:8080/search ~ v1.2.0+
 ```
 ## Функционал
 - Выполнение CRUD-функций над читателями и книгами
 - Назначение книг читателям
 - Освобождение книг у читателей
 - Просмотр имеющихся у читателей книг
+- Пагинация ```~ v1.2.0+```
+- Сортировка книг по дате выпуска ```~ v1.2.0+```
+- Поиск всех имеющихся книг в библиотеке ```~ v1.2.0+```
     
 ## Инструкция по сборке и запуску решения
 - Сделать `git clone` репозитория
@@ -29,9 +33,16 @@ http://localhost:8080/books
 
   В этом же разделе: `Fix` -> `...war exploded`. Далее, во вкладке `Deployment` очистить поле `Application context`
 - Подключить к проекту базу данных. Раздел `Database`->`New`->`Data Source`->`Postgresql`
-- В разделе `resources` добавить в файл `database.properties.origin` значение ключей
 
+#### Для версии v0.1.0
+- В разделе `resources` добавить в файл `database.properties.origin` значение ключей. Убрать ```.origin```
 <img src="https://github.com/geozakharenko/DigitalLibrary/assets/160642323/06f9ba40-8e7e-49ca-978c-15a0d4213813" width="600" height="120"/>&nbsp;
+
+#### Для версии v1.2.0+
+- В разделе `resources` добавить в файл `hibernate.properties.origin` значение ключей. Убрать ```.origin```
+![img.png](img.png)
+
+
 
 - Создать в базе данных 2 таблицы:
 ```

@@ -4,6 +4,8 @@ import com.zakharenko.models.Book;
 import com.zakharenko.models.Person;
 import com.zakharenko.repositories.BooksRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,13 +23,33 @@ public class BooksService {
         this.booksRepository = booksRepository;
     }
 
-    public List<Book> findAll() {
-        return booksRepository.findAll();
+    public List<Book> findAll(boolean sortByYear) {
+        if (sortByYear)
+            return booksRepository.findAll(Sort.by("yearOfRelease"));
+        else
+            return booksRepository.findAll();
+    }
+    public List<Book> findAll(Integer page, Integer booksPerPage, boolean sortByYear) {
+        if (sortByYear)
+            return booksRepository.findAll(PageRequest.of(page, booksPerPage, Sort.by("yearOfRelease"))).getContent();
+        else
+            return booksRepository.findAll(PageRequest.of(page, booksPerPage)).getContent();
     }
 
     public Book findOne(int id) {
         Optional<Book> foundBook = booksRepository.findById(id);
         return foundBook.orElse(null);
+    }
+
+    public Person getBookOwner(int bookId) {
+        return booksRepository.findById(bookId).map(Book::getOwner).orElse(null);
+    }
+
+    public Optional<Book> findByAuthorAndTitle(String author, String title) {
+        return booksRepository.findByAuthorAndTitle(author, title).stream().findAny();
+    }
+    public List<Book> findByTitleStartingWith(String title) {
+        return booksRepository.findByTitleStartingWith(title);
     }
 
     @Transactional
@@ -46,14 +68,6 @@ public class BooksService {
     @Transactional
     public void delete(int id) {
         booksRepository.deleteById(id);
-    }
-
-    public Person getBookOwner(int bookId) {
-        return booksRepository.findById(bookId).map(Book::getOwner).orElse(null);
-    }
-
-    public Optional<Book> findByAuthorAndTitle(String author, String title) {
-        return booksRepository.findByAuthorAndTitle(author, title).stream().findAny();
     }
 
     @Transactional

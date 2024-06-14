@@ -12,6 +12,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/books")
@@ -28,8 +32,14 @@ public class BooksController {
     }
 
     @GetMapping()
-    public String index(Model model) {
-        model.addAttribute("books", booksService.findAll());
+    public String index(@RequestParam(value = "page", required = false) Integer page,
+                        @RequestParam(value = "books_per_page", required = false) Integer booksPerPage,
+                        @RequestParam(value = "sort_by_year", required = false) boolean sortByYear,
+                        Model model) {
+        if (page == null || booksPerPage == null)
+            model.addAttribute("books", booksService.findAll(sortByYear));
+        else
+            model.addAttribute("books", booksService.findAll(page, booksPerPage, sortByYear));
         return "books/index";
     }
 
@@ -46,6 +56,25 @@ public class BooksController {
     public String newBook(@ModelAttribute("book") Book book) {
         return "books/new";
     }
+
+    @GetMapping("/search")
+    public String search(@ModelAttribute("book") Book book,
+                         @RequestParam(value = "request", required = false) String request,
+                         Model model) {
+        if (request != null)
+            model.addAttribute("foundBooks", booksService.findByTitleStartingWith(request));
+        return "books/search";
+    }
+
+    @PostMapping("/search")
+    public String search(@ModelAttribute("book") Book book) throws UnsupportedEncodingException {
+        if (Objects.equals(book.getTitle(), "")) return "redirect:/books/search";
+        else {
+            String encodedTitle = URLEncoder.encode(book.getTitle(), StandardCharsets.UTF_8.toString());
+            return "redirect:/books/search?request="+encodedTitle;
+        }
+    }
+
 
     @PostMapping
     public String create(@ModelAttribute("book") @Valid Book book,
@@ -76,7 +105,7 @@ public class BooksController {
     public String release(@PathVariable("bookId") int bookId) {
         System.out.println(bookId);
         booksService.release(bookId);
-        return "redirect:/books/"+bookId;
+        return "redirect:/books/" + bookId;
     }
 
     @PatchMapping("/{bookId}/assignPerson")
