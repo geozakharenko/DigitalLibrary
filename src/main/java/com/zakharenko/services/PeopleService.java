@@ -8,9 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 
 /**
@@ -46,6 +44,12 @@ public class PeopleService {
         if (person.isPresent()){
             Hibernate.initialize(person.get().getBooks());
             books = person.get().getBooks();
+            books.forEach(book -> {
+                System.out.println(book.isExpired());
+                long diffInMillis = Math.abs(book.getTakenAt().getTime() - new Date().getTime());
+                if (diffInMillis > 864000000)
+                    book.setExpired(true);
+            });
         }
         return books;
     }

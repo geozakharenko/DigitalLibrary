@@ -4,11 +4,13 @@ import com.zakharenko.models.Book;
 import com.zakharenko.models.Person;
 import com.zakharenko.repositories.BooksRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,11 +31,12 @@ public class BooksService {
         else
             return booksRepository.findAll();
     }
-    public List<Book> findAll(Integer page, Integer booksPerPage, boolean sortByYear) {
+
+    public Page<Book> findAll(Integer page, Integer booksPerPage, boolean sortByYear) {
         if (sortByYear)
-            return booksRepository.findAll(PageRequest.of(page, booksPerPage, Sort.by("yearOfRelease"))).getContent();
+            return booksRepository.findAll(PageRequest.of(page, booksPerPage, Sort.by("yearOfRelease")));
         else
-            return booksRepository.findAll(PageRequest.of(page, booksPerPage)).getContent();
+            return booksRepository.findAll(PageRequest.of(page, booksPerPage));
     }
 
     public Book findOne(int id) {
@@ -48,6 +51,7 @@ public class BooksService {
     public Optional<Book> findByAuthorAndTitle(String author, String title) {
         return booksRepository.findByAuthorAndTitle(author, title).stream().findAny();
     }
+
     public List<Book> findByTitleStartingWith(String title) {
         return booksRepository.findByTitleStartingWith(title);
     }
@@ -59,10 +63,14 @@ public class BooksService {
 
     @Transactional
     public void update(int id, Book book) {
-        Book bookToBeUpdated = booksRepository.findById(id).get();
-        book.setBookId(id);
-        book.setOwner(bookToBeUpdated.getOwner());
-        booksRepository.save(book);
+
+        booksRepository.findById(id).ifPresent(
+                bookToBeUpdated -> {
+                    book.setBookId(id);
+                    book.setOwner(bookToBeUpdated.getOwner());
+                    booksRepository.save(book);
+                }
+        );
     }
 
     @Transactional
@@ -73,14 +81,19 @@ public class BooksService {
     @Transactional
     public void release(int bookId) {
         booksRepository.findById(bookId).ifPresent(
-                book -> book.setOwner(null)
-        );
+                book -> {
+                    book.setOwner(null);
+                    book.setTakenAt(null);
+                });
     }
 
     @Transactional
     public void assignAPerson(Person newPerson, int bookId) {
         booksRepository.findById(bookId).ifPresent(
-                book -> book.setOwner(newPerson)
+                book -> {
+                    book.setOwner(newPerson);
+                    book.setTakenAt(new Date());
+                }
         );
     }
 }

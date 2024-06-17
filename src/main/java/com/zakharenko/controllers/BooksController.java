@@ -6,6 +6,7 @@ import com.zakharenko.util.BookCreateValidator;
 import com.zakharenko.services.BooksService;
 import com.zakharenko.services.PeopleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -38,8 +39,13 @@ public class BooksController {
                         Model model) {
         if (page == null || booksPerPage == null)
             model.addAttribute("books", booksService.findAll(sortByYear));
-        else
-            model.addAttribute("books", booksService.findAll(page, booksPerPage, sortByYear));
+        else {
+            Page<Book> usersPage = booksService.findAll(page, booksPerPage, sortByYear);
+            model.addAttribute("books", usersPage.getContent());
+            model.addAttribute("totalPages", usersPage.getTotalPages());
+            model.addAttribute("books_per_page", booksPerPage);
+            model.addAttribute("sort_by_year", sortByYear);
+        }
         return "books/index";
     }
 
@@ -71,7 +77,7 @@ public class BooksController {
         if (Objects.equals(book.getTitle(), "")) return "redirect:/books/search";
         else {
             String encodedTitle = URLEncoder.encode(book.getTitle(), StandardCharsets.UTF_8.toString());
-            return "redirect:/books/search?request="+encodedTitle;
+            return "redirect:/books/search?request=" + encodedTitle;
         }
     }
 

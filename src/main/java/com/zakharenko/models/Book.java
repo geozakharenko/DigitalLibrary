@@ -2,6 +2,7 @@ package com.zakharenko.models;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "Book")
@@ -31,9 +32,16 @@ public class Book {
     @Column(name = "year_of_release")
     private Integer yearOfRelease;
 
+    @Column(name = "taken_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date takenAt;
+
     @ManyToOne
     @JoinColumn(name = "person_id", referencedColumnName = "person_id")
     private Person owner;
+
+    @Transient
+    private boolean expired;
 
     public Book(String title, String author, Integer yearOfRelease) {
         this.title = title;
@@ -76,12 +84,28 @@ public class Book {
         this.yearOfRelease = yearOfRelease;
     }
 
+    public Date getTakenAt() {
+        return takenAt;
+    }
+
+    public void setTakenAt(Date takenAt) {
+        this.takenAt = takenAt;
+    }
+
     public Person getOwner() {
         return owner;
     }
 
     public void setOwner(Person owner) {
         this.owner = owner;
+    }
+
+    public boolean isExpired() {
+        return expired;
+    }
+
+    public void setExpired(boolean expired) {
+        this.expired = expired;
     }
 
     @Override

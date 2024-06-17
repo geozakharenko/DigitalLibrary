@@ -14,7 +14,7 @@
     <br/>
 </form>
 <div th:if="${foundBooks.isEmpty()}">
-    <p>Книги не найдены</p>
+    <p>Книг не найдено</p>
     <hr/>
 </div>
 
@@ -22,10 +22,18 @@
     <hr/>
     <b>Найденные книги:</b>
     <br/>
-    <table th:each="book: ${foundBooks}">
-        <tr th:text="${book.getTitle()}">book</tr>
-    </table>
-    <hr/>
+    <div th:each="book: ${foundBooks}">
+        <p th:text="${book.getTitle()+', '+book.getAuthor()+', '+book.getYearOfRelease()}">book</p>
+
+        <div th:if="${book.getOwner()!=null}">
+            <span>Книга сейчас у: </span> <span th:text="${book.getOwner().getFullName()}">Person name</span>
+        </div>
+
+        <div th:if="${book.getOwner()==null}">
+            <span>Книга свободна</span>
+        </div>
+        <hr/>
+    </div>
 </div>
 </body>
 </html>

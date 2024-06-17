@@ -11,6 +11,13 @@
        th:text="${book.getTitle()+', '+book.getAuthor()+', '+book.getYearOfRelease()}">book</a>
 </div>
 <br/>
+
+<div>
+    <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+        <a th:href="@{/books(page=${i}, books_per_page=${books_per_page}, sort_by_year=${sort_by_year})}" th:text="${i}"></a>
+    </span>
+</div>
+<br/>
 <a href="/books/new">Добавить новую книгу</a>
 
 </body>
