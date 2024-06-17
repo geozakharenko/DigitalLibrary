@@ -17,6 +17,9 @@
 http://localhost:8080/people
 http://localhost:8080/books
 http://localhost:8080/search ~ v1.2.0+
+http://localhost:8080/books?sort_by_year=true  ~ v1.2.0+
+http://localhost:8080/books?page=0&books_per_page=6  ~ v1.2.0+
+http://localhost:8080/books?page=0&books_per_page=6&sort_by_year=true  ~ v1.2.0+
 ```
 ## Функционал
 - Выполнение CRUD-функций над читателями и книгами
@@ -26,6 +29,8 @@ http://localhost:8080/search ~ v1.2.0+
 - Пагинация ```~ v1.2.0+```
 - Сортировка книг по дате выпуска ```~ v1.2.0+```
 - Поиск всех имеющихся книг в библиотеке ```~ v1.2.0+```
+- Визуальное представление пагинации  ```~ v1.3.0+```
+- Контроль просроченности по времянахождению у читателя взятой книги ```~ v1.3.0+```
     
 ## Инструкция по сборке и запуску решения
 - Сделать `git clone` репозитория
@@ -42,8 +47,7 @@ http://localhost:8080/search ~ v1.2.0+
 - В разделе `resources` добавить в файл `hibernate.properties.origin` значение ключей. Убрать ```.origin```
 ![img.png](img.png)
 
-
-
+## Операции с базой данных
 - Создать в базе данных 2 таблицы:
 ```
 CREATE TABLE Person
@@ -60,4 +64,9 @@ CREATE TABLE Book
     author    varchar(120) NOT NULL,
     year_of_release int NOT NULL
 );
+```
+#### Для версии v1.3.0+
+- Дополнительно выполнить:
+```
+ALTER TABLE book ADD COLUMN taken_at TIMESTAMP
 ```
