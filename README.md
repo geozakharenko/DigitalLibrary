@@ -34,19 +34,11 @@ http://localhost:8080/books?page=0&books_per_page=6&sort_by_year=true  ~ v1.2.0+
     
 ## Инструкция по сборке и запуску решения
 - Сделать `git clone` репозитория
-- Скачать [Tomcat Server](https://tomcat.apache.org/) и подключить его в разделе `Run` -> `Edit configurations` -> `Add new ...` -> `Tomcat Server` -> `Local`
 
-  В этом же разделе: `Fix` -> `...war exploded`. Далее, во вкладке `Deployment` очистить поле `Application context`
-- Подключить к проекту базу данных. Раздел `Database`->`New`->`Data Source`->`Postgresql`
+#### Для версии v2.0.0+
+- В разделе `resources` добавить в файл `application.properties` значения ключей.
 
-#### Для версии v0.1.0
-- В разделе `resources` добавить в файл `database.properties.origin` значение ключей. Убрать ```.origin```
-<img src="https://github.com/geozakharenko/DigitalLibrary/assets/160642323/06f9ba40-8e7e-49ca-978c-15a0d4213813" width="600" height="120"/>&nbsp;
-
-#### Для версии v1.2.0+
-- В разделе `resources` добавить в файл `hibernate.properties.origin` значение ключей. Убрать ```.origin```
-![img.png](img.png)
-
+![img_1.png](img_1.png)
 ## Операции с базой данных
 - Создать в базе данных 2 таблицы:
 ```

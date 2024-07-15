@@ -5,6 +5,7 @@ import com.zakharenko.models.Person;
 import com.zakharenko.util.BookCreateValidator;
 import com.zakharenko.services.BooksService;
 import com.zakharenko.services.PeopleService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -12,7 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
