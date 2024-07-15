@@ -1,10 +1,17 @@
 # Проект "Электронная библиотека"
 Проект представляет из себя реализацию web-приложения библиотеки, переходящей на цифровой учёт книг.
 
+Состоит из 4-х релизов:
+
+1) Связь с БД через JDBC Template (Spring Template). Запуск через Tomcat.
+2) Связь с БД через Spring Data JPA. Запуск через Tomcat.
+3) Связь с БД через Spring Data JPA. Запуск через Tomcat.
+4) Связь с БД через Spring Data JPA. Запуск через Spring Boot.
+
 ## Стек
 <div>
-  <img src="https://github.com/devicons/devicon/blob/master/icons/java/java-original.svg" title="Java-8" alt="Java" width="40" height="40"/>&nbsp;
-  <img src="https://github.com/devicons/devicon/blob/master/icons/spring/spring-original.svg" title="Spring-5-2-25" alt="Spring" width="40" height="40"/>&nbsp;
+  <img src="https://github.com/devicons/devicon/blob/master/icons/java/java-original.svg" title="Java" alt="Java" width="40" height="40"/>&nbsp;
+  <img src="https://github.com/devicons/devicon/blob/master/icons/spring/spring-original.svg" title="Spring" alt="Spring" width="40" height="40"/>&nbsp;
   <img src="https://github.com/devicons/devicon/blob/master/icons/maven/maven-original.svg" title="Maven" alt="Maven" width="40" height="40"/>&nbsp;
   <img src="https://github.com/devicons/devicon/blob/master/icons/postgresql/postgresql-original.svg" title="Postgresql" alt="Postgresql" width="40" height="40"/>&nbsp;
   <img src="https://github.com/geozakharenko/DigitalLibrary/assets/160642323/16563eb7-1fb6-406d-934e-80f7f75d151b" title="Thymeleaf" width="48" height="40">
