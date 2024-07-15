@@ -76,7 +76,7 @@ public class BooksController {
     public String search(@ModelAttribute("book") Book book) throws UnsupportedEncodingException {
         if (Objects.equals(book.getTitle(), "")) return "redirect:/books/search";
         else {
-            String encodedTitle = URLEncoder.encode(book.getTitle(), StandardCharsets.UTF_8.toString());
+            String encodedTitle = URLEncoder.encode(book.getTitle(), StandardCharsets.UTF_8);
             return "redirect:/books/search?request=" + encodedTitle;
         }
     }
