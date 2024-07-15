@@ -16,7 +16,7 @@
 ```
 http://localhost:8080/people
 http://localhost:8080/books
-http://localhost:8080/search ~ v1.2.0+
+http://localhost:8080/books/search ~ v1.2.0+
 http://localhost:8080/books?sort_by_year=true  ~ v1.2.0+
 http://localhost:8080/books?page=0&books_per_page=6  ~ v1.2.0+
 http://localhost:8080/books?page=0&books_per_page=6&sort_by_year=true  ~ v1.2.0+
